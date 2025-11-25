@@ -10,6 +10,9 @@ class control:
     __FREQUENCY_SAMPLE_SIZE=25
     __SECONDS_BETWEEN_SAMPLES=2
 
+    __PUMP_FORWARD=0
+    __PUMP_REVERSE=1
+
     __CLEANING_TIME_SECONDS=10
     
     def is_button_pressed(self): 
@@ -17,14 +20,15 @@ class control:
         #probably need to add debouncing here
         return is_pressed
     
-    def __start_pump(self):
-        raise NotImplementedError()
+    def __start_pump(self, direction):
+        GPIO.output(self.PUMP_DIRECTION_GPIO, direction)
+        GPIO.output(self.PUMP_GPIO, GPIO.HIGH)
     
     def __stop_pump(self):
-        raise NotImplementedError()
+        GPIO.output(self.PUMP_GPIO, GPIO.LOW)
     
     def measure_frequency(self):
-        self.__start_pump()
+        self.__start_pump(self.__PUMP_FORWARD)
 
         sample_sums=0
         for _ in len(range(self.__FREQUENCY_SAMPLE_SIZE)):
@@ -34,7 +38,7 @@ class control:
         self.__stop_pump()
 
     def clean(self):
-        self.__start_pump()
+        self.__start_pump(self.__PUMP_REVERSE)
         time.sleep(self.__CLEANING_TIME_SECONDS)
         self.__stop_pump()
 
