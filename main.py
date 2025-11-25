@@ -16,6 +16,9 @@ class __main:
 
     __buffer_measurement=None
     __sample_measurement=None
+    __result=False
+
+    __MEASUREMENT_TOLERANCE=1000
 
     embedded_interaction=embedded.control()
     
@@ -56,7 +59,8 @@ class __main:
         display.display.display_graph()
 
         self.__sample_measurement=self.embedded_interaction.measure_frequency()
-
+        self.__result=not(self.__buffer_measurement-self.__MEASUREMENT_TOLERANCE<self.__sample_measurement 
+                          and self.__sample_measurement<self.__buffer_measurement+self.__MEASUREMENT_TOLERANCE)
         display.display.display_cleaning_next()
 
 
@@ -64,7 +68,7 @@ class __main:
         print("Cleaning the device, perepare next sampe")
         display.display.display_cleaning()
         self.embedded_interaction.clean()
-        display.display.display_result()
+        display.display.display_result(self.__result)
 
     
 application_instance=__main()

@@ -31,7 +31,7 @@ class control:
         self.__start_pump(self.__PUMP_FORWARD)
 
         sample_sums=0
-        for _ in len(range(self.__FREQUENCY_SAMPLE_SIZE)):
+        for _ in range(self.__FREQUENCY_SAMPLE_SIZE):
             sample_sums+=qcm.get_qcm_frequency()
             time.sleep(self.__SECONDS_BETWEEN_SAMPLES)
 
