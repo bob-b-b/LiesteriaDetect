@@ -1,22 +1,26 @@
 #import qcm_data_collection
 import time
+import RPi.GPIO as GPIO 
 
 class control:
     PUMP_GPIO=1
-    BUTTON_GPIO=2
+    PUMP_DIRECTION_GPIO=2
+    BUTTON_GPIO=12
 
     __FREQUENCY_SAMPLE_SIZE=25
     __SECONDS_BETWEEN_SAMPLES=2
 
     __CLEANING_TIME_SECONDS=10
     
-    def is_button_pressed(): #Make sure this accounts for bouncing
+    def is_button_pressed(self): 
+        is_pressed=GPIO.input(self.BUTTON_GPIO)
+        #probably need to add debouncing here
+        return is_pressed
+    
+    def __start_pump(self):
         raise NotImplementedError()
     
-    def __start_pump():
-        raise NotImplementedError()
-    
-    def __stop_pump():
+    def __stop_pump(self):
         raise NotImplementedError()
     
     def measure_frequency(self):
@@ -34,7 +38,15 @@ class control:
         time.sleep(self.__CLEANING_TIME_SECONDS)
         self.__stop_pump()
 
-    
+    def configure_components(self):
+        GPIO.setmode(GPIO.BCM)
+        
+        GPIO.setup(self.PUMP_GPIO, GPIO.OUT)
+        GPIO.setup(self.PUMP_DIRECTION_GPIO, GPIO.OUT)
+
+        GPIO.setup(self.BUTTON_GPIO, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+
+
 class qcm:
     def get_qcm_frequency():
         raise NotImplementedError()
