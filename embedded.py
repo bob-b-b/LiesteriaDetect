@@ -4,51 +4,70 @@ import RPi.GPIO as GPIO
 
 class control:
     PUMP_GPIO=1
-    PUMP_DIRECTION_GPIO=2
+    PUMP_FORWARD_GPIO=2
+    PUMP_BACKWARD_GPIO=3
     BUTTON_GPIO=12
 
-    __FREQUENCY_SAMPLE_SIZE=25
+    __QCM_FREQUENCY_SAMPLE_SIZE=25
     __SECONDS_BETWEEN_SAMPLES=2
 
-    __PUMP_FORWARD=0
-    __PUMP_REVERSE=1
-
     __CLEANING_TIME_SECONDS=10
+
+    __PWM_DUTY_CYCLE=50
+    __PWM_FREQUENCY=255
+
+    __pump_pwm=None
     
     def is_button_pressed(self): 
         is_pressed=GPIO.input(self.BUTTON_GPIO)
+        time.sleep(1)
         #probably need to add debouncing here
         return is_pressed
     
-    def __start_pump(self, direction):
-        GPIO.output(self.PUMP_DIRECTION_GPIO, direction)
-        GPIO.output(self.PUMP_GPIO, GPIO.HIGH)
+    def __start_pump(self, reverse=False):
+        if reverse:
+            GPIO.output(self.PUMP_FORWARD_GPIO, GPIO.LOW)
+            GPIO.output(self.PUMP_BACKWARD_GPIO, GPIO.HIGH)
+        else:
+            GPIO.output(self.PUMP_BACKWARD_GPIO, GPIO.LOW)
+            GPIO.output(self.PUMP_FORWARD_GPIO, GPIO.HIGH)
+
+        self.__pump_pwm.start(self.__PWM_DUTY_CYCLE)
     
     def __stop_pump(self):
-        GPIO.output(self.PUMP_GPIO, GPIO.LOW)
+        self.__pump_pwm.stop()
     
     def measure_frequency(self):
-        self.__start_pump(self.__PUMP_FORWARD)
+        self.__start_pump()
 
         sample_sums=0
-        for _ in range(self.__FREQUENCY_SAMPLE_SIZE):
+        for _ in range(self.__QCM_FREQUENCY_SAMPLE_SIZE):
             sample_sums+=qcm.get_qcm_frequency()
             time.sleep(self.__SECONDS_BETWEEN_SAMPLES)
 
         self.__stop_pump()
 
     def clean(self):
-        self.__start_pump(self.__PUMP_REVERSE)
+        self.__start_pump(reverse=True)
         time.sleep(self.__CLEANING_TIME_SECONDS)
         self.__stop_pump()
 
-    def configure_components(self):
+    def __init__(self, callback_function):
         GPIO.setmode(GPIO.BCM)
         
         GPIO.setup(self.PUMP_GPIO, GPIO.OUT)
-        GPIO.setup(self.PUMP_DIRECTION_GPIO, GPIO.OUT)
+        self.__pump_pwm=GPIO.PWM(self.PUMP_GPIO, self.__PWM_FREQUENCY)
+
+        GPIO.setup(self.PUMP_FORWARD_GPIO, GPIO.OUT)
+        GPIO.setup(self.PUMP_BACKWARD_GPIO, GPIO.OUT)
 
         GPIO.setup(self.BUTTON_GPIO, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+        GPIO.add_event_detect(
+            self.BUTTON_GPIO,
+            GPIO.FALLING,
+            callback=callback_function(),
+            bouncetime=200
+        )
 
 
 class qcm:

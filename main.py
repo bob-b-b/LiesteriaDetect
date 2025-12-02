@@ -20,11 +20,11 @@ class __main:
 
     __MEASUREMENT_TOLERANCE=1000
 
-    embedded_interaction=embedded.control()
+    embedded_interaction=None
     
     def run(self):
 
-        self.embedded_interaction.configure_components()
+        self.embedded_interaction = embedded.control(self.next_stage)
 
         is_running=True
         stages=[self.start, self.measure_buffer, self.measure_sample, self.clean]
@@ -33,13 +33,13 @@ class __main:
         stages[0]()
 
         while(is_running):
-            #if(keyboard.is_pressed('k')):
-            if(self.embedded_interaction.is_button_pressed()):
-                time.sleep(2) #This is just the keypress debouncing, i think for the button it should be handeled in embedded class
-                stages[current_stage]() #Runs the stored function
-                current_stage=(current_stage+1)%len(stages)
+            time.sleep(1)
+                
             
-        
+    def next_stage(self):
+        self.stages[current_stage]() #Runs the stored function
+        current_stage=(current_stage+1)%len(self.stages)
+
     def start(slef):
         print("Please input the buffer solution, then press the button")
         display.display.display_buffer_next()
