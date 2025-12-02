@@ -17,12 +17,7 @@ class control:
     __PWM_FREQUENCY=255
 
     __pump_pwm=None
-    
-    def is_button_pressed(self): 
-        is_pressed=GPIO.input(self.BUTTON_GPIO)
-        time.sleep(1)
-        #probably need to add debouncing here
-        return is_pressed
+
     
     def __start_pump(self, reverse=False):
         if reverse:
