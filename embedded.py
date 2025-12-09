@@ -1,6 +1,7 @@
 #import qcm_data_collection
 import time
-import RPi.GPIO as GPIO 
+import RPi.GPIO as GPIO
+import frequency_grabber
 
 class control:
     PUMP_GPIO=1
@@ -17,6 +18,8 @@ class control:
     __PWM_FREQUENCY=255
 
     __pump_pwm=None
+
+    qcm_interaction=None
 
     
     def __start_pump(self, reverse=False):
@@ -48,7 +51,7 @@ class control:
 
         sample_sums=0
         for _ in range(self.__QCM_FREQUENCY_SAMPLE_SIZE):
-            sample_sums+=qcm.get_qcm_frequency()
+            sample_sums+=self.qcm_interaction.getQCMFreq()
             time.sleep(self.__SECONDS_BETWEEN_SAMPLES)
 
         self.__stop_pump()
@@ -72,7 +75,4 @@ class control:
         GPIO.setup(self.BUTTON_GPIO, GPIO.IN, pull_up_down=GPIO.PUD_UP)
         self.enable_button(callback_function)
 
-
-class qcm:
-    def get_qcm_frequency():
-        raise NotImplementedError()
+        self.qcm_interaction=frequency_grabber.fequency_grabber()
