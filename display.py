@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 class display: #The idea is that the different displays set the screen, the show actually sends it to the screen
 
     async def display_graph():

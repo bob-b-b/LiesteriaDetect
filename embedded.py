@@ -1,4 +1,4 @@
-#import qcm_data_collection
+# -*- coding: utf-8 -*-
 import time
 import RPi.GPIO as GPIO
 import frequency_grabber

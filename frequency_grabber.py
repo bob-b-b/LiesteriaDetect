@@ -1,8 +1,4 @@
-#sudo apt-get update
-#sudo apt-get install python3-pip
-#sudo apt-get install python3-dev
-#sudo apt-get install i2c-tools
-#pip3 install smbus2 spidev pyserial sqlite3
+# -*- coding: utf-8 -*-
 
 import serial
 import sqlite3
