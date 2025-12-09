@@ -4,10 +4,10 @@ import RPi.GPIO as GPIO
 import frequency_grabber
 
 class control:
-    PUMP_GPIO=1
-    PUMP_FORWARD_GPIO=2
-    PUMP_BACKWARD_GPIO=3
-    BUTTON_GPIO=12
+    PUMP_PWM_GPIO=16
+    PUMP_FORWARD_GPIO=20
+    PUMP_BACKWARD_GPIO=16
+    BUTTON_GPIO=26
 
     __QCM_FREQUENCY_SAMPLE_SIZE=4
     __SECONDS_BETWEEN_SAMPLES=2
@@ -66,8 +66,8 @@ class control:
     def __init__(self, callback_function):
         GPIO.setmode(GPIO.BCM)
         
-        GPIO.setup(self.PUMP_GPIO, GPIO.OUT)
-        self.__pump_pwm=GPIO.PWM(self.PUMP_GPIO, self.__PWM_FREQUENCY)
+        GPIO.setup(self.PUMP_PWM_GPIO, GPIO.OUT)
+        self.__pump_pwm=GPIO.PWM(self.PUMP_PWM_GPIO, self.__PWM_FREQUENCY)
 
         GPIO.setup(self.PUMP_FORWARD_GPIO, GPIO.OUT)
         GPIO.setup(self.PUMP_BACKWARD_GPIO, GPIO.OUT)
