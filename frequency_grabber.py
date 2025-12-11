@@ -4,14 +4,19 @@ import serial
 import sqlite3
 import time
 
-class fequency_grabber:
+class frequency_grabber:
     __ser=None
     __conn=None
     __cursor=None
    
     def __init__(self):
         # Set the correct Serial port
-        self.__ser = serial.Serial('/dev/ttyACM0', 115200, timeout=1)
+        #More robust error handling would be better here, this is for testing
+        try:
+            self.__ser = serial.Serial('/dev/ttyACM0', 115200, timeout=1)
+        except:
+            self.__ser = None
+
         time.sleep(2)  # wait for Arduino to reset
         self.__ser.reset_input_buffer()
 
