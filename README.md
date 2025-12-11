@@ -23,9 +23,9 @@ The active configuration file is located at `/boot/firmware/config.txt`.
 
 2.  Add the following configuration line to the **end** of the file:
     ```ini
-    dtoverlay=gpio-shutdown,gpio_pin=6,active_low=1,gpio_pull=up,debounce=500
+    dtoverlay=gpio-shutdown,gpio_pin=6, active_low=1, debounce=1000
     ```
-    > 💡 **Configuration Details:** This line tells the kernel to monitor **GPIO 6** and trigger a shutdown if the pin is held low for **500 milliseconds**.
+    > 💡 **Configuration Details:** This line tells the kernel to monitor **GPIO 6** and trigger a shutdown if the pin is held low for **1000 milliseconds**.
 
 3.  Save the file (**CTRL+X**, then **Y**, then **ENTER**).
 
@@ -53,19 +53,16 @@ Paste the following content into the file:
 ```ini
 [Unit]
 Description=Liesteria Detect Application
-# Network dependency is intentionally omitted for faster startup, as the application is local.
+After=local-fs.target
 
 [Service]
-# The full path to the Python script
 ExecStart=/usr/bin/python3 /home/pi/LiesteriaDetect/main.py
-# If the script exits unexpectedly, systemd will automatically restart it
 Restart=always
-# Set the working directory for file operations (e.g., accessing the SQLite DB)
-WorkingDirectory=/home/pi/LiesteriaDetect
-StandardOutput=journal
+RestartSec=10
+KillMode=process
+TimeoutSec=infinity
 
 [Install]
-# Enable the service to run on multi-user boot
 WantedBy=multi-user.target
 ```
 ### 2.2. Activate the Service
