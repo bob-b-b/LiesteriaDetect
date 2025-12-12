@@ -32,9 +32,6 @@ class __main__:
     current_stage=1
 
     __event_drain_necessary=False
-    
-    app = None
-    main_window = None
 
     def __init__(self):
         signal.signal(signal.SIGTERM, self.application_stop) 
