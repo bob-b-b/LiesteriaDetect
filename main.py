@@ -8,6 +8,7 @@ import sys
 
 
 # This forces the application to render directly to the LCD driver.
+os.environ['QT_LOGGING_RULES'] = 'qt.qpa.*=true'
 os.environ['QT_QPA_PLATFORM'] = 'linuxfb'
 
 
