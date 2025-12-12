@@ -14,6 +14,8 @@ class __main__:
 
     __MEASUREMENT_TOLERANCE=1000
 
+    __porcess_in_progress=False
+
     embedded_interaction=None
     stages=[]
     current_stage=1
@@ -39,10 +41,15 @@ class __main__:
             print(error)
             
     def next_stage(self, button=None):
-        self.embedded_interaction.disable_button()
+
+        if self.__porcess_in_progress:
+            print("Another process is currently executing, call was discarded")
+            return
+
+        self.__porcess_in_progress=True
         self.stages[self.current_stage]() #Runs the stored function
         self.current_stage=(self.current_stage+1)%len(self.stages)
-        self.embedded_interaction.enable_button(self.next_stage)
+        self.__porcess_in_progress=False
 
     def start(self):
         print("Please input the buffer solution, then press the button")
