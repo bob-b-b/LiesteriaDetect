@@ -18,6 +18,9 @@ class __main__:
     stages=[]
     current_stage=1
     
+    app = None
+    main_window = None
+
     def __init__(self):
         signal.signal(signal.SIGTERM, self.application_stop) 
         signal.signal(signal.SIGINT, self.application_stop)
@@ -29,6 +32,14 @@ class __main__:
         
 
         self.stages[0]()
+
+        global app
+        global main_window
+        app = display.QtWidgets.QApplication([])
+        main_window = display.MainWindow(10) #SET NUMBER to max data size
+        main_window.setWindowFlags(display.QtCore.Qt.CustomizeWindowHint)
+        main_window.showMaximized()
+        app.exec()
 
 
     def run(self):
@@ -47,39 +58,54 @@ class __main__:
     def start(self):
         print("Please input the buffer solution, then press the button")
         #display.display.display_buffer_next()
+        global main_window
+        main_window.show_text("Please input the buffer solution, then press the button")
 
     def measure_nothing(self):
         print("Measuring nothing... For maintenance?")
         nothing_measurement=self.embedded_interaction.measure_frequency()
         print(nothing_measurement)
         #display.display.display_graph()
+        global main_window
+        main_window.show_graph()
 
     def measure_buffer(self):
         print("Measuring buffer solution, insert sample next, then press the button")
         #display.display.display_graph()
+        global main_window
+        main_window.show_graph()
+        main_window.set_title("Measuring buffer...")
 
         self.__buffer_measurement=self.embedded_interaction.measure_frequency()
 
         #display.display.display_sample_next()
+        main_window.show_text("Measurement done.  Switch to sample, then press the button.")
 
         
 
     def measure_sample(self):
         print ("Measuring sample solution, insert cleaning next, then press the button")
         #display.display.display_graph()
+        global main_window
+        main_window.show_graph()
+        main_window.set_title("Measuring sample...")
 
         self.__sample_measurement=self.embedded_interaction.measure_frequency()
         self.__result=not(self.__buffer_measurement-self.__MEASUREMENT_TOLERANCE<self.__sample_measurement 
                           and self.__sample_measurement<self.__buffer_measurement+self.__MEASUREMENT_TOLERANCE)
         #display.display.display_cleaning_next()
+        main_window.show_text("Measurement done.  Switch to cleaning solution, then press the button.")
 
 
     def clean(self):
         print("Cleaning the device, perepare next sample")
         #display.display.display_cleaning()
+        global main_window
+        main_window.show_text("Cleaning the device, perepare next sample")
         self.embedded_interaction.clean()
         print("Listeria: ", self.__result)
         #display.display.display_result(self.__result)
+        main_window("Listeria: {self.__result}")
 
     def application_stop(self,sig,frame):
         self.__is_running=False

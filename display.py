@@ -87,13 +87,3 @@ class MainWindow(QtWidgets.QMainWindow):
     def show_graph(self):
         self.textscreen.hide()
         self.plot_graph.showMaximized()
-    
-
-app = QtWidgets.QApplication([])
-main = MainWindow(10)
-main.setWindowFlags(QtCore.Qt.CustomizeWindowHint)
-main.showMaximized()
-main.show_graph()
-main.show_text("hello")
-main.show_graph()
-app.exec()
