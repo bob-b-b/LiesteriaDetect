@@ -6,6 +6,8 @@ import signal
 import os
 import sys
 
+app = display.QtWidgets.QApplication([])
+
 class __main__:
 
     __is_running=False
