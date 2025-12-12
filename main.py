@@ -38,6 +38,8 @@ class __main__:
             while(self.__is_running):
                 if(self.__event_drain_necessary):
                     self.embedded_interaction.drain_and_enable_button()
+                    self.__event_drain_necessary=False
+                    
                 time.sleep(1)
         except Exception as error:
             print(error)
@@ -46,7 +48,8 @@ class __main__:
         self.embedded_interaction.disable_button()
         self.stages[self.current_stage]() #Runs the stored function
         self.current_stage=(self.current_stage+1)%len(self.stages)
-        
+        self.__event_drain_necessary=True
+
     def start(self):
         print("Please input the buffer solution, then press the button")
         #display.display.display_buffer_next()
