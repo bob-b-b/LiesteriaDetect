@@ -17,6 +17,8 @@ class __main__:
     embedded_interaction=None
     stages=[]
     current_stage=1
+
+    __event_drain_necessary=False
     
     def __init__(self):
         signal.signal(signal.SIGTERM, self.application_stop) 
@@ -34,6 +36,8 @@ class __main__:
     def run(self):
         try:
             while(self.__is_running):
+                if(self.__event_drain_necessary):
+                    self.embedded_interaction.drain_and_enable_button()
                 time.sleep(1)
         except Exception as error:
             print(error)
@@ -42,7 +46,6 @@ class __main__:
         self.embedded_interaction.disable_button()
         self.stages[self.current_stage]() #Runs the stored function
         self.current_stage=(self.current_stage+1)%len(self.stages)
-        self.embedded_interaction.enable_button(self.next_stage)
         
     def start(self):
         print("Please input the buffer solution, then press the button")
