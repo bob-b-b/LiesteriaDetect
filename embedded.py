@@ -45,7 +45,7 @@ class control:
             self.__drain_callback,
             bouncetime=200
         )
-        time.sleep(500)
+        time.sleep(0.5)
         GPIO.remove_event_detect(self.BUTTON_GPIO)
         GPIO.add_event_detect(
             self.BUTTON_GPIO,
