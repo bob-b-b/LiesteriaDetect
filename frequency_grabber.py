@@ -23,7 +23,7 @@ class frequency_grabber:
         if self.__ser: self.__ser.reset_input_buffer()
 
         # SQLite setup
-        self.__conn = sqlite3.connect("qcm_data.db")
+        self.__conn = sqlite3.connect("qcm_data.db", check_same_thread=False)
         self.__cursor = self.__conn.cursor()
         self.__cursor.execute("""
             CREATE TABLE IF NOT EXISTS qcm_frequency (
