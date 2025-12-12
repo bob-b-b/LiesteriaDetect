@@ -14,9 +14,6 @@ os.environ['QT_QPA_PLATFORM'] = 'linuxfb'
 
 app = QtWidgets.QApplication([])
 import display
-main_window = display.MainWindow(embedded.control.QCM_FREQUENCY_SAMPLE_SIZE) #SET NUMBER to max data size
-main_window.setWindowFlags(display.QtCore.Qt.CustomizeWindowHint)
-main_window.showMaximized()
 
 class __main__:
 
@@ -38,6 +35,11 @@ class __main__:
         signal.signal(signal.SIGINT, self.application_stop)
         
         self.embedded_interaction = embedded.control(self.next_stage)
+
+        global main_window
+        main_window = display.MainWindow(embedded.control.QCM_FREQUENCY_SAMPLE_SIZE) #SET NUMBER to max data size
+        main_window.setWindowFlags(display.QtCore.Qt.CustomizeWindowHint)
+        main_window.showMaximized()
 
         self.__is_running=True
         self.stages=[self.start, self.measure_nothing, self.measure_buffer, self.measure_sample, self.clean]     
