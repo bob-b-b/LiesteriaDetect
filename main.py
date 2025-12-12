@@ -32,13 +32,7 @@ class __main__:
 
         self.__is_running=True
         self.stages=[self.start, self.measure_nothing, self.measure_buffer, self.measure_sample, self.clean]
-
-        global app
-        global main_window
-        app = display.QtWidgets.QApplication([])
-        main_window = display.MainWindow(self.embedded_interaction.QCM_FREQUENCY_SAMPLE_SIZE) #SET NUMBER to max data size
-        main_window.setWindowFlags(display.QtCore.Qt.CustomizeWindowHint)
-        main_window.showMaximized()
+        
 
         self.stages[0]()
 
@@ -116,5 +110,11 @@ class __main__:
 # This forces the application to render directly to the LCD driver.
 os.environ['QT_QPA_PLATFORM'] = 'linuxfb'
     
+app = display.QtWidgets.QApplication([])
+main_window = display.MainWindow(embedded.control.QCM_FREQUENCY_SAMPLE_SIZE) #SET NUMBER to max data size
+main_window.setWindowFlags(display.QtCore.Qt.CustomizeWindowHint)
+main_window.showMaximized()
+
 application_instance=__main__()
 application_instance.run()
+
