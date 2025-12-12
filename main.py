@@ -111,7 +111,7 @@ class __main__:
 # This forces the application to render directly to the LCD driver.
 os.environ['QT_QPA_PLATFORM'] = 'linuxfb'
     
-app = display.QtWidgets.QApplication([])
+#app = display.QtWidgets.QApplication([])
 main_window = None
 
 application_instance=__main__()
