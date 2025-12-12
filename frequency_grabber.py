@@ -14,8 +14,10 @@ class frequency_grabber:
         #More robust error handling would be better here, this is for testing
         try:
             self.__ser = serial.Serial('/dev/ttyACM0', 115200, timeout=1)
-        except:
+            print("Successful connection established")
+        except Exception as e:
             self.__ser = None
+            print("An error occured during setup:",e)
 
         time.sleep(2)  # wait for Arduino to reset
         if self.__ser: self.__ser.reset_input_buffer()
