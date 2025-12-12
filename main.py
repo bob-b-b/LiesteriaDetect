@@ -6,6 +6,9 @@ import signal
 import os
 import sys
 
+# This forces the application to render directly to the LCD driver.
+os.environ['QT_QPA_PLATFORM'] = 'linuxfb'
+
 app = display.QtWidgets.QApplication([])
 
 class __main__:
@@ -110,8 +113,6 @@ class __main__:
     def __del__(self):
         del self.embedded_interaction
 
-# This forces the application to render directly to the LCD driver.
-os.environ['QT_QPA_PLATFORM'] = 'linuxfb'
     
 #app = display.QtWidgets.QApplication([])
 main_window = None
