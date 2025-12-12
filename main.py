@@ -34,7 +34,7 @@ class __main__:
         
         self.embedded_interaction = embedded.control(self.next_stage)
         global app
-        app = QtWidgets.QApplication([])
+        app = display.QtWidgets.QApplication([])
         global main_window
         main_window = display.MainWindow(embedded.control.QCM_FREQUENCY_SAMPLE_SIZE) #SET NUMBER to max data size
         main_window.setWindowFlags(display.QtCore.Qt.CustomizeWindowHint)
