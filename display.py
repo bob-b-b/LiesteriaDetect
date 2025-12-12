@@ -6,7 +6,6 @@ class MainWindow(QtWidgets.QMainWindow):
         super().__init__()
 
         #Text Screen
-        app = QtWidgets.QApplication([])
         self.textscreen = QtWidgets.QLabel(self)
         self.textscreen.hide()
         self.textscreen.setWindowFlags(QtCore.Qt.CustomizeWindowHint)
