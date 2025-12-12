@@ -1,19 +1,17 @@
 # -*- coding: utf-8 -*-
-
+import display
 import embedded
 import time
 import signal
 import os
 import sys
-import pyqtgraph as pg
-from PyQt5 import QtCore, QtWidgets
 
 
 # This forces the application to render directly to the LCD driver.
 os.environ['QT_QPA_PLATFORM'] = 'linuxfb'
 
-app = QtWidgets.QApplication([])
-import display
+
+
 
 class __main__:
 
@@ -35,7 +33,8 @@ class __main__:
         signal.signal(signal.SIGINT, self.application_stop)
         
         self.embedded_interaction = embedded.control(self.next_stage)
-
+        global app
+        app = QtWidgets.QApplication([])
         global main_window
         main_window = display.MainWindow(embedded.control.QCM_FREQUENCY_SAMPLE_SIZE) #SET NUMBER to max data size
         main_window.setWindowFlags(display.QtCore.Qt.CustomizeWindowHint)
